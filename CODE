@@ -1,0 +1,65 @@
+def calculate_individual_share(total, people_count, tip):
+    """Works out how much each person needs to chip in."""
+    tip_money = total * tip / 100
+    final_amount = total + tip_money
+    individual_cost = final_amount / people_count
+    
+    return tip_money, final_amount, individual_cost
+
+
+def display_results(original_bill, tip_percent, tip_amt, final_total, person_share):
+    """Shows the complete breakdown nicely."""
+    print("\n" + "~" * 45)
+    print("         💰 BILL BREAKDOWN 💰")
+    print("~" * 45)
+    print(f"\nBill amount:              ₹{original_bill:,.2f}")
+    print(f"Service tip ({tip_percent}%):        ₹{tip_amt:,.2f}")
+    print(f"Total payable:            ₹{final_total:,.2f}")
+    print(f"\nEach person contributes:  ₹{person_share:,.2f}")
+    print("~" * 45 + "\n")
+
+
+def gather_details():
+    """Gets all the necessary info from the user."""
+    print("🍽️  Restaurant Bill Splitter - India Edition\n")
+    
+    try:
+        bill = float(input("Enter bill total (in rupees): ₹"))
+        folks = int(input("Number of friends sharing: "))
+        tip_pct = float(input("Service tip % (typically 5-10): "))
+        
+        if folks <= 0 or bill < 0 or tip_pct < 0:
+            print("Please enter valid positive numbers!")
+            return None, None, None
+            
+        return bill, folks, tip_pct
+    except ValueError:
+        print("Oops! Please enter numbers only.")
+        return None, None, None
+
+
+def run_splitter():
+    """Runs the complete bill splitting process."""
+    continue_splitting = True
+    
+    while continue_splitting:
+        bill_total, people, tip_rate = gather_details()
+        
+        if bill_total is None:
+            continue
+        
+        tip_amount, total_with_tip, per_head = calculate_individual_share(
+            bill_total, people, tip_rate
+        )
+        
+        display_results(bill_total, tip_rate, tip_amount, 
+                       total_with_tip, per_head)
+        
+        choice = input("Calculate for another group? (yes/no): ").lower()
+        continue_splitting = choice.startswith('y')
+    
+    print("\n✨ Happy dining! Come back anytime.\n")
+
+
+if __name__ == "__main__":
+    run_splitter()
